@@ -1,0 +1,18 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
+:root {
+  --base-white: #edf2f4;
+  --base-dark: #2b2d42;
+  --base-light: #8d99ae;
+  --base-red: #ef233c;
+  --base-red-dark: #d80032;
+}
+
+html{
+  background-color: var(--base-white);
+}
