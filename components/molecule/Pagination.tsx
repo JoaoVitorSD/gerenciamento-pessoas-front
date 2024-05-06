@@ -6,6 +6,7 @@ export default function Pagination<T>({ page, size,
     numberOfElements,
     totalElements,
     totalPages,
+    content,
     moveLeft,
     moveRight,
     getPageParams,
@@ -14,12 +15,17 @@ export default function Pagination<T>({ page, size,
 
     // x elements of y
     return (
-        <div className={styles.pagination}>
-            <Button action={moveLeft} name={"<"} type="button" />
-            <span>{page + 1} de {totalPages}</span>
-            <Button action={moveRight} name={">"} type="button" />
-            <span>{size * page + numberOfElements} - {totalElements} </span>
-        </div>
+        <>
+            {content.length > 0 &&
+
+                <div className={styles.pagination}>
+                    <Button action={moveLeft} name={"<"} type="button" />
+                    <span>{page + 1} de {totalPages}</span>
+                    <Button action={moveRight} name={">"} type="button" />
+                    <span>{size * page + numberOfElements} - {totalElements} </span>
+                </div>
+            }
+        </>
 
     )
 }
