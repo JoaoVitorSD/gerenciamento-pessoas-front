@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export default function usePage<T>(): PageProps<T>{
+
   const page = useState<Page<T>>({
     content: [],
     page: 0,
@@ -26,7 +27,7 @@ export default function usePage<T>(): PageProps<T>{
       });
     }
   }
-  function getPageParams() : Object{
+  function getPageParams(): Record<string, any> {
     return {
       page: page[0].page,
       size: page[0].size,
@@ -35,6 +36,7 @@ export default function usePage<T>(): PageProps<T>{
   function clean() {
     page[1]({
       ...page[0],
+      page: 0,
       content: [],
     });
   }
@@ -66,7 +68,7 @@ export interface PageProps<T> {
   totalPages: number;
   moveLeft: () => void;
   moveRight: () => void;
-  getPageParams: () => Object;
+  getPageParams: () => Record<string, string>;
   setPage: (page: Page<T>) => void;
   clean: () => void;
 }

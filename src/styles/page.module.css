@@ -13,4 +13,10 @@
   height: 100%;
   border: none;
   outline: none;
+  transition: background-color 0.3s;
+}
+
+.button:hover{
+  background-color: var(--base-red);
+  cursor: pointer;
 }

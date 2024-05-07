@@ -6,25 +6,37 @@ import formatDate from "../../util/format/formatDate";
 import styles from "@style/table.module.css";
 import Pagination from "@molecule/Pagination";
 import Button from "@atom/Button";
+import { PessoaResumida } from "@types/PessoaRessumida";
+import RequestProps from "@types/RequestProps";
+import ModalPessoa from "@molecule/ModalPessoa";
 export default function PessoasTable() {
     const page = usePage<PessoaResumida>();
     const [filter, setFilter] = useState<string>("");
     function loadPessoas() {
-        const params: any = page.getPageParams();
-        page.clean()
-        params["filter"] = filter;
-        Pessoa(params).then((data) => {
-            console.log(data);
-            page.setPage({
-                ...data
-            });
-        }
-        );
+        const props: RequestProps = {
+            method: "GET",
+            params: page.getPageParams(),
+
+        };
+        Pessoa(props).then((resp) => {
+            page.setPage(resp)
+        });
     }
     useEffect(function reloadData() {
         loadPessoas();
     }, [page.page, filter]);
 
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [selectedPessoa, setSelectedPessoa] = useState<PessoaResumida|undefined>(undefined);
+
+    function openModal(pessoa: PessoaResumida){
+        setSelectedPessoa(pessoa);
+        setModalOpen(true);
+    }
+    function closeModal(){
+        setModalOpen(false);
+        setSelectedPessoa(undefined);
+    }
     return (
         <div className={styles["table-container"]}>
             <div className={styles["input-container"]}>
@@ -43,11 +55,12 @@ export default function PessoasTable() {
                         <th>Nome</th>
                         <th>Data de Nascimento</th>
                         <th>Endereço Principal</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody className={styles["table-body"]}>
 
-                    {Array.isArray(page.content) && page.content.map(pessoa => (
+                    {page&&Array.isArray(page?.content) && page.content.map(pessoa => (
                         <tr key={pessoa.id}>
                             <td>{pessoa.id}</td>
                             <td>{pessoa.nome}</td>
@@ -59,30 +72,15 @@ export default function PessoasTable() {
                                     'N/A'
                                 )}
                             </td>
+                            <td><Button action={() => openModal(pessoa)} name="Editar"  type="button" /></td>
                         </tr>
                     ))}
                 </tbody>
 
             </table>
+            {modalOpen && <ModalPessoa pessoa={selectedPessoa} closeModal={closeModal} />}
             <Pagination {...page} />
         </div>
 
     )
 }
-interface PessoaResumida {
-    id: string;
-    nome: string;
-    dataNascimento: string;
-    enderecoPrincipal?: EnderecoPrincipal;
-}
-
-interface EnderecoPrincipal {
-    id: string;
-    cep: string;
-    logradouro: string;
-    numero: string;
-    cidade: string;
-    estado: string;
-    enderecoPrincipal: boolean;
-}
-

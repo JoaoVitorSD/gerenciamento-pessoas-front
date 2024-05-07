@@ -1,16 +1,25 @@
 "use server";
-export default async function Pessoa(urlParams: any) {
-  
-  console.log("Buscando pessoas");
-  const url = new URLSearchParams(urlParams ).toString();
-  const resp = await fetch(process.env.API_URL + "/pessoa?"+url, {
-    method: "GET",
+
+import RequestProps from "@types/RequestProps";
+
+export default async function Pessoa({
+  method,
+  params,
+  body,
+  path,
+}: RequestProps) {
+  let URL = process.env.API_URL + "/pessoa";
+  if (path) {
+    URL += "/" + path;
+  }
+  const urlParams = new URLSearchParams(params).toString();
+
+  const req = await fetch(URL + "?"+urlParams, {
+    method: method,
     headers: {
       "Content-Type": "application/json",
     },
   });
-  const data = await resp.json();
-  console.log(data);
+  const data = req.json();
   return data;
-
 }
