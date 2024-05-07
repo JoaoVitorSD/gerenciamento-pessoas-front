@@ -6,8 +6,8 @@ import formatDate from "../../util/format/formatDate";
 import styles from "@style/table.module.css";
 import Pagination from "@molecule/Pagination";
 import Button from "@atom/Button";
-import { PessoaResumida } from "@types/PessoaRessumida";
-import RequestProps from "@types/RequestProps";
+import { PessoaResumida } from "@types";
+import {RequestProps} from "@types";
 import ModalPessoa from "@molecule/ModalPessoa";
 export default function PessoasTable() {
     const page = usePage<PessoaResumida>();

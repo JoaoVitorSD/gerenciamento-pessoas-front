@@ -1,18 +1,18 @@
-import RequestProps from "@types/RequestProps";
-import { PessoaResumida } from "../../types/PessoaRessumida";
+import {PessoaResumida, RequestProps, Endereco as EnderecoType} from "@types";
 import styles from "@style/form.module.css";
 import { useEffect, useState } from "react";
 import Pessoa from "../../src/app/pessoa";
-import { Endereco } from "@types/Endereco";
 import Button from "@atom/Button";
+import Endereco from "../../src/app/endereco";
+import CloseModalButton from "@atom/CloseModalButton";
 export default function ModalPessoa({ pessoa, closeModal }: { pessoa?: PessoaResumida, closeModal: Function }) {
 
     const isUpdate = pessoa !== undefined;
 
     const [nome, setNome] = useState<string>("");
     const [dataNascimento, setDataNascimento] = useState<string>("");
-    const [enderecoPrincipal, setEnderecoPrincipal] = useState<Endereco | null>();
-    const [enderecos, setEnderecos] = useState<Endereco[]>([]);
+    const [enderecoPrincipal, setEnderecoPrincipal] = useState<EnderecoType | null>();
+    const [enderecos, setEnderecos] = useState<EnderecoType[]>([]);
 
     useEffect(function loadPessoa() {
         const path = pessoa?.id ? pessoa.id : "";
@@ -25,6 +25,10 @@ export default function ModalPessoa({ pessoa, closeModal }: { pessoa?: PessoaRes
         })
     }, [pessoa])
 
+    function changeEndereco(enderecoUpdate: any, key: string, value: string) {
+        enderecoUpdate[key] = value;
+        setEnderecos(prevEnderecos => prevEnderecos.map(endereco=> endereco.id === enderecoUpdate.id ? enderecoUpdate : endereco))
+    }
     function savePessoa() {
 
         const request: RequestProps = {
@@ -47,12 +51,29 @@ export default function ModalPessoa({ pessoa, closeModal }: { pessoa?: PessoaRes
             alert(errroMessage || "Erro ao salvar pessoa");
         });
     }
+    function salvarEndereco(endereco: EnderecoType) {
+        const request: RequestProps = {
+            method: "PUT",
+            body: {...endereco, pessoa: pessoa?.id}
+        }
+        Endereco(request).then(resp => {
+            if (resp.ok) {
+                return resp.json();
+            }
+            return Promise.reject(resp);
+        }).then(data => {
+            const errorMessage = data?.message;
+            alert(errorMessage || "Erro ao salvar endereço");
+        })
+    }
     return (
         <div className={styles["modal"]}>
             <div className={styles["modal-content"]}>
-                <span className={styles["close"]} onClick={() => closeModal()}>&times;</span>
-                <h2>{isUpdate ? "Atualizar" : "Cadastrar"} Pessoa</h2>
                 <form className={styles["form"]} onSubmit={savePessoa}>
+                <div className={styles["modal-header"]}> 
+                <h2>{isUpdate ? "Atualizar" : "Cadastrar"} Pessoa</h2>
+                <CloseModalButton action={closeModal} />
+                </div>
                     <div className={styles["modal-content-input"]}>
                         <label>Nome</label>
                         <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
@@ -72,11 +93,12 @@ export default function ModalPessoa({ pessoa, closeModal }: { pessoa?: PessoaRes
                     {Array.isArray(enderecos) && enderecos.map((endereco, index) => {
                         return <div key={index} className={styles["endereco-content"]}>
                             <label className={styles["endereco-content-part"]}><input type="radio" value={endereco.id} checked={enderecoPrincipal?.id === endereco.id} onChange={(e) => setEnderecoPrincipal(endereco)} required /></label>
-                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.logradouro} /> </label>
-                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.numero} /> </label>
-                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.cidade} /> </label>
-                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.estado} /> </label>
-                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.cep} /> </label>
+                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.logradouro} onChange={(event) => changeEndereco(endereco, "logradouro", event.target.value)} /> </label>
+                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.numero} onChange={(event) => changeEndereco(endereco, "numero", event.target.value)} /> </label>
+                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.cidade} onChange={(event) => changeEndereco(endereco, "cidade", event.target.value)} /> </label>
+                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.estado} onChange={(event) => changeEndereco(endereco, "estado", event.target.value)} /> </label>
+                            <label className={styles["endereco-content-part"]}> <input type="text" value={endereco.cep} onChange={(event)=> changeEndereco(endereco, "cep", event.target.value)} /> </label>
+                            <Button action={() => salvarEndereco(endereco)} name={"Salvar"} type="button" />
                         </div>
 
                     })}

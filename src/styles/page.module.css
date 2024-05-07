@@ -20,3 +20,23 @@
   background-color: var(--base-red);
   cursor: pointer;
 }
+
+.button-close{
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--base-red);
+  font-weight: 800;
+  color: var(--base-white);
+  border-radius: 50%;
+  border: none;
+  transition: background-color 0.3s;
+  outline: none;
+}
+
+.button-close:hover{
+  background-color: var(--base-dark);
+  cursor: pointer;
+}

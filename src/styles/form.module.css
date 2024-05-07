@@ -16,18 +16,23 @@
   background: var(--base-white);
   width: 50%;
   padding: 20px;
+  min-width: 800px;
   border-radius: 5px;
+}
+.modal-header{
+  display: flex;
+  justify-content: space-between;
 }
 .modal-content-input{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 
 }
 .modal-content input,.modal-content select{
     border: 1px solid black;
     outline: none;
-    padding: 10px;
+    padding: 5px;
 }
 
 
@@ -35,7 +40,7 @@
   display: grid;
   width: 100%;
   height: 100%;
-  grid-template-columns: 8% 28% 15% 20% 20% 10%;
+  grid-template-columns: 8% 28% 15% 20% 10% 10% 10%;
 }
 
 .modal-content-button{
