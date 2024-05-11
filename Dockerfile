@@ -8,4 +8,4 @@ RUN npm install
 
 RUN npm run build
 
-entrypoint ['npm','start']
+ENTRYPOINT ["sh", "-c", "npm start"]
