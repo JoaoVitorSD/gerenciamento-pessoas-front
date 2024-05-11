@@ -1,8 +1,8 @@
 FROM node:22-alpine
 
-RUN mv . /opt/app
+WORKDIR /app
 
-WORKDIR /opt/app
+COPY . .
 
 RUN npm install
 
