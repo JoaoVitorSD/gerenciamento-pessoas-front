@@ -12,20 +12,20 @@ import ModalPessoa from "@molecule/ModalPessoa";
 export default function PessoasTable() {
     const page = usePage<PessoaResumida>();
     const [filter, setFilter] = useState<string>("");
-    function loadPessoas() {
-        const props: RequestProps = {
-            method: "GET",
-            params: page.getPageParams(),
-
-        };
-        Pessoa(props).then((resp) => {
-            page.setPage(resp)
-        });
-    }
+    
     useEffect(function reloadData() {
         loadPessoas();
     }, [page.page, filter]);
 
+    async function loadPessoas() {
+        const props: RequestProps = {
+            method: "GET",
+            params: {...page.getPageParams(), filter},
+
+        };
+        const resp = await Pessoa(props);
+        page.setPage(resp.data);
+    }
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [selectedPessoa, setSelectedPessoa] = useState<PessoaResumida|undefined>(undefined);
 
@@ -36,6 +36,11 @@ export default function PessoasTable() {
     function closeModal(){
         setModalOpen(false);
         setSelectedPessoa(undefined);
+        loadPessoas();
+    }
+    function openInsertModal(){
+        setSelectedPessoa(undefined);
+        setModalOpen(true);
     }
     return (
         <div className={styles["table-container"]}>
@@ -46,6 +51,7 @@ export default function PessoasTable() {
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)} />
                 <Button action={loadPessoas} name={"Recarregar"} type="button" />
+                <Button action={openInsertModal} name={"Adicionar"} type="button" />
             </div>
             <table className={styles["table"]}>
 

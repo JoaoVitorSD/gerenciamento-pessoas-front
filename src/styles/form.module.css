@@ -16,7 +16,7 @@
   background: var(--base-white);
   width: 50%;
   padding: 20px;
-  min-width: 800px;
+  min-width: 900px;
   border-radius: 5px;
 }
 .modal-header{

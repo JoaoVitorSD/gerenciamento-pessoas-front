@@ -9,7 +9,7 @@ export interface PessoaResumida {
 
 
 export interface Endereco {
-  id: string;
+  id?: string;
   cep: string;
   logradouro: string;
   numero: string;
@@ -22,4 +22,10 @@ export interface RequestProps {
   params?: Record<string, string>;
   body?: Object;
   path?: string;
+}
+
+export interface ResponseProps{
+  ok: boolean;
+  data: any;
+  message?: string;
 }

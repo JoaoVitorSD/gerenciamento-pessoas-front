@@ -5,8 +5,8 @@ import PessoasTable from "@organism/PessoasTable";
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-       <PessoasTable filter=""/>
+      <div>
+       <PessoasTable/>
       </div>
     </main>
   );
