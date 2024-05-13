@@ -66,7 +66,7 @@ export default function PessoasTable() {
                 </thead>
                 <tbody className={styles["table-body"]}>
 
-                    {page&&Array.isArray(page?.content) && page.content.map(pessoa => (
+                    {page && Array.isArray(page.content)&& page.content.map(pessoa => (
                         <tr key={pessoa.id}>
                             <td>{pessoa.id}</td>
                             <td>{pessoa.nome}</td>
